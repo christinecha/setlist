@@ -56,13 +56,40 @@
 
 	'use strict';
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 	__webpack_require__(5);
 
 	var firebase = __webpack_require__(9);
 
+	var Room = __webpack_require__(14);
+
 	// firebase.initializeApp({ keys })
 
-	console.log('Ready for some codes!');
+	var SetList = function () {
+	  function SetList() {
+	    _classCallCheck(this, SetList);
+
+	    this.state = {
+	      activeRoomId: 'Recurse Center'
+	    };
+
+	    this.render();
+	  }
+
+	  _createClass(SetList, [{
+	    key: 'render',
+	    value: function render() {
+	      new Room(this.state.activeRoomId);
+	    }
+	  }]);
+
+	  return SetList;
+	}();
+
+	new SetList();
 
 /***/ },
 /* 5 */
@@ -1050,6 +1077,22 @@
 	(function(){function a(a){return new Y(a)}var b={TaskState:va,TaskEvent:ua,StringFormat:Ua,Storage:Y,Reference:X};if("undefined"!==typeof firebase)firebase.INTERNAL.registerService("storage",a,b);else throw Error("Cannot install Firebase Storage - be sure to load firebase-app.js first.");})();})();
 	module.exports = firebase.storage;
 
+
+/***/ },
+/* 14 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Room = function Room(id) {
+	  _classCallCheck(this, Room);
+
+	  console.log('You are in Room: ' + id);
+	};
+
+	module.exports = Room;
 
 /***/ }
 /******/ ]);
