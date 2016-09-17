@@ -1,0 +1,44 @@
+{
+  "name": "setlist",
+  "version": "0.0.0",
+  "description": "A simple webapp to make karaoke a little easier to manage.",
+  "main": "index.js",
+  "scripts": {
+    "build": "rm -rf ./bundle.js && webpack",
+    "clean": "rm -rf node_modules && rm -rf ./bundle.js",
+    "dev": "webpack-dev-server",
+    "start": "open http://localhost:8080/webpack-dev-server/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/christinecha/collaborativewebsite.git"
+  },
+  "keywords": [
+    "javascript",
+    "firebase",
+    "webpack",
+    "es6"
+  ],
+  "devDependencies": {
+    "babel-core": "^6.13.2",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.13.2",
+    "css-loader": "^0.25.0",
+    "less": "^2.7.1",
+    "less-loader": "^2.2.3",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.10.5",
+    "webpack-dev-server": "^1.15.1",
+    "webpack-stream": "^2.0.0"
+  },
+  "author": "hello@christinecha.com (https://github.com/christinecha)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/christinecha/setlist/issues"
+  },
+  "homepage": "https://github.com/christinecha/setlist#readme",
+  "dependencies": {
+    "firebase": "^3.4.0"
+  }
+}
