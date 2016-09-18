@@ -17,7 +17,7 @@ class Room extends Base {
   }
 
   addEventListeners() {
-    this.node.addEventListener('click', this.props.handleClick)
+    this.node.addEventListener('click', this.props.handleEnterRoom)
   }
 
   render() {

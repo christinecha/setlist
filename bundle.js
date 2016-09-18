@@ -44,7 +44,7 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(5);
+	module.exports = __webpack_require__(7);
 
 
 /***/ },
@@ -52,28 +52,30 @@
 /* 2 */,
 /* 3 */,
 /* 4 */,
-/* 5 */
+/* 5 */,
+/* 6 */,
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	__webpack_require__(6);
+	__webpack_require__(8);
 
-	var SetList = __webpack_require__(10);
+	var SetList = __webpack_require__(12);
 
 	new SetList();
 
 /***/ },
-/* 6 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(7);
+	var content = __webpack_require__(9);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(9)(content, {});
+	var update = __webpack_require__(11)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -90,21 +92,21 @@
 	}
 
 /***/ },
-/* 7 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(8)();
+	exports = module.exports = __webpack_require__(10)();
 	// imports
 
 
 	// module
-	exports.push([module.id, ".no-transitions {\n  transition: none !important;\n  -webkit-transition: none !important;\n  -moz-transition: none !important;\n}\n* {\n  font-family: 'Inconsolata', monospace;\n  margin: 0 0;\n  padding: 0 0;\n}\n.xsmall {\n  font-size: 11px;\n  text-transform: uppercase;\n  letter-spacing: 0.1em;\n}\n.clickable {\n  cursor: pointer;\n}\n.inline {\n  display: inline-block;\n}\n.hidden {\n  display: none;\n}\n#room-selector {\n  width: 300px;\n  height: 100%;\n}\n#room-selector .room-name {\n  text-transform: uppercase;\n  font-size: 22px;\n}\n", ""]);
+	exports.push([module.id, ".no-transitions {\n  transition: none !important;\n  -webkit-transition: none !important;\n  -moz-transition: none !important;\n}\n* {\n  font-family: 'Inconsolata', monospace;\n  margin: 0 0;\n  padding: 0 0;\n}\n.xsmall {\n  font-size: 11px;\n  text-transform: uppercase;\n  letter-spacing: 0.1em;\n}\n.clickable {\n  cursor: pointer;\n}\n.inline {\n  display: inline-block;\n}\n.hidden {\n  display: none;\n}\n.player {\n  width: 100vw;\n  height: 100vh;\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 1;\n  background-color: rgba(0, 0, 0, 0.8);\n}\n#room-selector {\n  display: inline-block;\n  vertical-align: top;\n  width: 300px;\n  height: 100vh;\n}\n#room-selector .room-name {\n  text-transform: uppercase;\n  font-size: 22px;\n}\n#set-list {\n  display: inline-block;\n  vertical-align: top;\n  width: calc(100% - 300px);\n  height: 100vh;\n  background-color: #eee;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 8 */
+/* 10 */
 /***/ function(module, exports) {
 
 	/*
@@ -160,7 +162,7 @@
 
 
 /***/ },
-/* 9 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -412,7 +414,7 @@
 
 
 /***/ },
-/* 10 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -425,7 +427,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var firebase = __webpack_require__(11);
+	var firebase = __webpack_require__(13);
 
 	firebase.initializeApp({
 	  apiKey: "AIzaSyBqaeiNuy4zlN1fOzV7l9OuDwAzKmO24nE",
@@ -435,10 +437,11 @@
 	  messagingSenderId: "1082659044728"
 	});
 
-	var Base = __webpack_require__(16);
-	var Room = __webpack_require__(17);
+	var Base = __webpack_require__(18);
+	var Room = __webpack_require__(19);
+	var Queue = __webpack_require__(20);
 
-	var $setlist = document.getElementById('setlist');
+	var $setlist = document.getElementById('set-list');
 
 	var SetList = function (_Base) {
 	  _inherits(SetList, _Base);
@@ -446,17 +449,23 @@
 	  function SetList() {
 	    _classCallCheck(this, SetList);
 
-	    // set up the state object
 	    var _this = _possibleConstructorReturn(this, (SetList.__proto__ || Object.getPrototypeOf(SetList)).call(this));
 
+	    _this.addEventListeners();
+
+	    // set up the state object
 	    _this.state = {
 	      rooms: {},
+	      showPlayer: false,
 	      activeRoom: null
 	    };
 
+	    // set up child modules
+	    _this._rooms = {};
+	    _this.queue = new Queue({ handleClosePlayer: _this.handleClosePlayer.bind(_this) });
+
 	    // watch room data
 	    _this.watchRoomsData();
-	    _this._rooms = {};
 
 	    // ... and voila!
 	    _this.render();
@@ -464,49 +473,81 @@
 	  }
 
 	  _createClass(SetList, [{
+	    key: "addEventListeners",
+	    value: function addEventListeners() {
+	      var _this2 = this;
+
+	      var $showPlayer = $setlist.querySelector('.show-player');
+	      $showPlayer.addEventListener('click', function () {
+	        _this2.state.showPlayer = true;
+	        _this2.render();
+	      });
+	    }
+	  }, {
 	    key: "watchRoomsData",
 	    value: function watchRoomsData() {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      // Instantiate a watcher that will update this.rooms in realtime.
 	      // Easy peasy. Thanks, Firebase!
 	      firebase.database().ref('rooms/').on('value', function (snapshot) {
 	        var rooms = snapshot.val();
+	        // const rooms = {
+	        //   'test': { name: 'Recurse Center' }
+	        // }
 
 	        var _loop = function _loop(i) {
-	          _this2.state.rooms[i] = {
+	          _this3.state.rooms[i] = {
 	            name: rooms[i].name,
-	            handleClick: function handleClick() {
-	              return _this2.enterRoom(i);
+	            handleEnterRoom: function handleEnterRoom() {
+	              return _this3.handleEnterRoom(i);
 	            }
 	          };
-
-	          _this2.render();
 	        };
 
 	        for (var i in rooms) {
 	          _loop(i);
 	        }
+
+	        _this3.render();
 	      });
 	    }
+
+	    /** Methods to pass on to your children **/
+
 	  }, {
-	    key: "enterRoom",
-	    value: function enterRoom(key) {
+	    key: "handleEnterRoom",
+	    value: function handleEnterRoom(key) {
 	      this.state.activeRoom = key;
 	      this.render();
 	    }
 	  }, {
+	    key: "handleClosePlayer",
+	    value: function handleClosePlayer() {
+	      this.state.showPlayer = false;
+	      this.render();
+	    }
+	    /*****************************************/
+
+	  }, {
 	    key: "render",
 	    value: function render() {
-	      var rooms = this.state.rooms;
+	      var _state = this.state;
+	      var activeRoom = _state.activeRoom;
+	      var roomView = _state.roomView;
+	      var rooms = _state.rooms;
 
+	      // Update the room modules from this.state
 
 	      for (var i in rooms) {
 	        var roomRef = this._rooms[i];
 	        if (roomRef) roomRef.update(rooms[i]);else this._rooms[i] = new Room(rooms[i]);
 	      }
 
-	      console.log(this.state.activeRoom);
+	      this.queue.update({
+	        roomKey: activeRoom,
+	        showPlayer: this.state.showPlayer
+	      });
 	    }
 	  }]);
 
@@ -516,7 +557,7 @@
 	module.exports = SetList;
 
 /***/ },
-/* 11 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -526,15 +567,15 @@
 	 *
 	 *   firebase = require('firebase');
 	 */
-	var firebase = __webpack_require__(12);
-	__webpack_require__(13);
-	__webpack_require__(14);
+	var firebase = __webpack_require__(14);
 	__webpack_require__(15);
+	__webpack_require__(16);
+	__webpack_require__(17);
 	module.exports = firebase;
 
 
 /***/ },
-/* 12 */
+/* 14 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*! @license Firebase v3.4.0
@@ -571,10 +612,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 13 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var firebase = __webpack_require__(12);
+	var firebase = __webpack_require__(14);
 	/*! @license Firebase v3.4.0
 	    Build: 3.4.0-rc.3
 	    Terms: https://developers.google.com/terms */
@@ -796,10 +837,10 @@
 
 
 /***/ },
-/* 14 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var firebase = __webpack_require__(12);
+	var firebase = __webpack_require__(14);
 	/*! @license Firebase v3.4.0
 	    Build: 3.4.0-rc.3
 	    Terms: https://developers.google.com/terms */
@@ -1047,10 +1088,10 @@
 
 
 /***/ },
-/* 15 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var firebase = __webpack_require__(12);
+	var firebase = __webpack_require__(14);
 	/*! @license Firebase v3.4.0
 	    Build: 3.4.0-rc.3
 	    Terms: https://developers.google.com/terms */
@@ -1155,7 +1196,7 @@
 
 
 /***/ },
-/* 16 */
+/* 18 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1177,26 +1218,39 @@
 	    // Using arguments instead of actual param requirements so that
 	    // the top-most module can be constructed without any of the args.
 
-	    var props = arguments[0] || {};
-	    var prototype = arguments[1] || null;
-	    var parent = arguments[2] || null;
-
-	    this.props = props;
+	    this.props = arguments[0] || {};
+	    this.prototype = arguments[1] || null;
+	    this.parent = arguments[2] || null;
 
 	    // store a clone of the prototype
-	    if (!prototype) return;
-	    this.node = prototype.cloneNode(true);
+	    if (!this.prototype) return;
+	    this.node = this.prototype.cloneNode(true);
 
 	    // stick the node into the supplied container
-	    if (!parent) return;
-	    parent.appendChild(this.node);
+	    if (!this.parent) return;
+	    this.parent.appendChild(this.node);
 	  }
 
 	  _createClass(Base, [{
+	    key: "destroy",
+	    value: function destroy() {
+	      this.parent.removeChild(this.node);
+	    }
+	  }, {
 	    key: "update",
 	    value: function update(props) {
-	      this.props = props;
+	      this.props = Object.assign(this.props, props);
 	      this.render();
+
+	      this.didUpdate(props);
+	    }
+
+	    /* Lifecycle method, always gets called after update */
+
+	  }, {
+	    key: "didUpdate",
+	    value: function didUpdate(props) {
+	      // Override this
 	    }
 	  }, {
 	    key: "render",
@@ -1211,7 +1265,7 @@
 	module.exports = Base;
 
 /***/ },
-/* 17 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1224,9 +1278,9 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var Base = __webpack_require__(16);
+	var Base = __webpack_require__(18);
 
-	var $setlist = document.getElementById('setlist');
+	var $setlist = document.getElementById('set-list');
 	var $roomSelector = document.getElementById('room-selector');
 	var $prototypes = document.getElementById('prototypes');
 	var $roomPrototype = $prototypes.querySelector('.room');
@@ -1252,7 +1306,7 @@
 	  _createClass(Room, [{
 	    key: 'addEventListeners',
 	    value: function addEventListeners() {
-	      this.node.addEventListener('click', this.props.handleClick);
+	      this.node.addEventListener('click', this.props.handleEnterRoom);
 	    }
 	  }, {
 	    key: 'render',
@@ -1265,6 +1319,246 @@
 	}(Base);
 
 	module.exports = Room;
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var firebase = __webpack_require__(13);
+
+	var Base = __webpack_require__(18);
+	var Song = __webpack_require__(21);
+	var Player = __webpack_require__(22);
+
+	// Cache all your DOM references
+	var $setlist = document.getElementById('set-list');
+	var $prototypes = document.getElementById('prototypes');
+	var $queuePrototype = $prototypes.querySelector('.queue');
+
+	var Queue = function (_Base) {
+	  _inherits(Queue, _Base);
+
+	  function Queue() {
+	    var props = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	    _classCallCheck(this, Queue);
+
+	    var _this = _possibleConstructorReturn(this, (Queue.__proto__ || Object.getPrototypeOf(Queue)).call(this, props, $queuePrototype, $setlist));
+
+	    _this.state = {
+	      activeSong: null,
+	      songs: {}
+	    };
+
+	    // cache the nodes you'll want access to in 'render' so it's only done once
+	    _this.$roomName = _this.node.querySelector('.room-name');
+
+	    // set up references for your child modules
+	    _this._songs = {};
+	    _this._player = new Player({ handleClosePlayer: _this.props.handleClosePlayer });
+
+	    // get song data from Firebase
+	    if (props.roomKey) _this.getSongsData(props.roomKey);
+
+	    _this.addEventListeners();
+	    _this.render();
+	    return _this;
+	  }
+
+	  _createClass(Queue, [{
+	    key: 'didUpdate',
+	    value: function didUpdate(props) {
+	      if (props.roomKey) this.getSongsData(props.roomKey);
+	    }
+	  }, {
+	    key: 'addEventListeners',
+	    value: function addEventListeners() {
+	      // this.node.addEventListener('click', this.props.handleClick)
+	    }
+	  }, {
+	    key: 'getSongsData',
+	    value: function getSongsData(roomKey) {
+	      var _this2 = this;
+
+	      // Instantiate a watcher that will update this.songs in realtime.
+	      // Easy peasy. Thanks, Firebase!
+	      firebase.database().ref('setlists/' + roomKey).once('value', function (snapshot) {
+	        var songs = snapshot.val();
+	        // const songs = {
+	        //   'key': { name: 'song-1' },
+	        //   'key-2': { name: 'ahhhh' }
+	        // }
+	        _this2.state.songs = {};
+
+	        for (var i in songs) {
+	          _this2.state.songs[i] = {
+	            name: songs[i].name,
+	            video: songs[i].video,
+	            $queue: _this2.node.querySelector('.songs')
+	          };
+	        }
+
+	        _this2.render();
+	      });
+	    }
+	  }, {
+	    key: 'cleanSongs',
+	    value: function cleanSongs() {
+	      for (var i in this._songs) {
+	        this._songs[i].destroy();
+	      }
+
+	      this._songs = {};
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var songs = this.state.songs;
+
+
+	      this.$roomName.innerText = this.props.roomKey;
+
+	      this.cleanSongs();
+
+	      for (var i in songs) {
+	        var songRef = this._songs[i];
+	        this._songs[i] = new Song(songs[i]);
+	      }
+
+	      this._player.update({
+	        isVisible: this.props.showPlayer,
+	        name: 'Songzzz'
+	      });
+	    }
+	  }]);
+
+	  return Queue;
+	}(Base);
+
+	module.exports = Queue;
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Base = __webpack_require__(18);
+
+	var $prototypes = document.getElementById('prototypes');
+	var $songPrototype = $prototypes.querySelector('.song');
+
+	var Song = function (_Base) {
+	  _inherits(Song, _Base);
+
+	  function Song() {
+	    var props = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	    _classCallCheck(this, Song);
+
+	    // cache the nodes you'll want access to in 'render' so it's only done once
+	    var _this = _possibleConstructorReturn(this, (Song.__proto__ || Object.getPrototypeOf(Song)).call(this, props, $songPrototype, props.$queue));
+
+	    _this.$songName = _this.node.querySelector('.song-name');
+
+	    _this.addEventListeners();
+	    _this.render();
+	    return _this;
+	  }
+
+	  _createClass(Song, [{
+	    key: 'addEventListeners',
+	    value: function addEventListeners() {
+	      // this.node.addEventListener('click', this.props.handleClick)
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      this.$songName.innerText = this.props.name;
+	    }
+	  }]);
+
+	  return Song;
+	}(Base);
+
+	module.exports = Song;
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Base = __webpack_require__(18);
+
+	var $prototypes = document.getElementById('prototypes');
+	var $playerPrototype = $prototypes.querySelector('.player');
+
+	var Player = function (_Base) {
+	  _inherits(Player, _Base);
+
+	  function Player() {
+	    var props = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	    _classCallCheck(this, Player);
+
+	    // cache the nodes you'll want access to in 'render' so it's only done once
+	    var _this = _possibleConstructorReturn(this, (Player.__proto__ || Object.getPrototypeOf(Player)).call(this, props, $playerPrototype, document.body));
+
+	    _this.$songName = _this.node.querySelector('.song-name');
+	    _this.$closePlayer = _this.node.querySelector('.close-player');
+
+	    _this.addEventListeners();
+	    _this.render();
+	    return _this;
+	  }
+
+	  _createClass(Player, [{
+	    key: 'addEventListeners',
+	    value: function addEventListeners() {
+	      console.log(this.props.handleClosePlayer);
+	      this.$closePlayer.addEventListener('click', this.props.handleClosePlayer);
+	      // this.node.addEventListener('click', this.props.handleClick)
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      if (this.props.isVisible) this.node.classList.remove('hidden');else this.node.classList.add('hidden');
+
+	      this.$songName.innerText = this.props.name;
+	    }
+	  }]);
+
+	  return Player;
+	}(Base);
+
+	module.exports = Player;
 
 /***/ }
 /******/ ]);

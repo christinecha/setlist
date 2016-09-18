@@ -9,26 +9,33 @@ class Base {
     // Using arguments instead of actual param requirements so that
     // the top-most module can be constructed without any of the args.
 
-    const props     = arguments[0] || {}
-    const prototype = arguments[1] || null
-    const parent    = arguments[2] || null
-
-    this.props = props
+    this.props    = arguments[0] || {}
+    this.prototype = arguments[1] || null
+    this.parent    = arguments[2] || null
 
     // store a clone of the prototype
-    if (!prototype) return
-    this.node = prototype.cloneNode(true)
+    if (!this.prototype) return
+    this.node = this.prototype.cloneNode(true)
 
     // stick the node into the supplied container
-    if (!parent) return
-    parent.appendChild(this.node)
+    if (!this.parent) return
+    this.parent.appendChild(this.node)
+  }
+
+  destroy() {
+    this.parent.removeChild(this.node)
   }
 
   update(props) {
     this.props = Object.assign(this.props, props)
     this.render()
 
-    if (this.didUpdate) this.didUpdate(props)
+    this.didUpdate(props)
+  }
+
+  /* Lifecycle method, always gets called after update */
+  didUpdate(props) {
+    // Override this
   }
 
   render() {
