@@ -8,30 +8,40 @@
     <meta name="description" content=""/>
     <meta property="og:image" content="./assets/screenshot.png" />
 
-    <!--~~~~~~~~~~~~~~ STYLES ~~~~~~~~~~~~~~-->
+    <!--~~~~~~~~~~~~~~~~~ STYLES ~~~~~~~~~~~~~~~~~-->
     <link href="https://fonts.googleapis.com/css?family=Quicksand|Open+Sans" rel="stylesheet">
-    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
   </head>
 
   <body>
     <div id="warning"></div>
-    <h1>SetList</p>
+    <h1>SetList</h1>
 
-    <div id="setlist">
-      <div id="room-selector">
-      </div>
-    </div>
+    <div id="room-selector"></div><!-- commenting out whitespace
+ --><div id="set-list"></div>
 
+
+    <!--~~~~~~~~~~~~~~~ PROTOTYPES ~~~~~~~~~~~~~~~-->
     <div id="prototypes" class="hidden">
       <div class="room">
         <p class="xsmall">Room</p>
         <h2 class="room-name"></h2>
       </div>
-    </div>
 
-    <!--~~~~~~~~~~~~~~ SCRIPTS ~~~~~~~~~~~~~~-->
+      <div class="queue">
+        <h2 class="room-name"></h2>
+        <div class="songs"></div>
+      </div>
+
+      <div class="song">
+        <h2 class="song-name"></h2>
+      </div>
+    </div>
+    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+    <!--~~~~~~~~~~~~~~~~ SCRIPTS ~~~~~~~~~~~~~~~~~-->
     <script src="bundle.js"></script>
-    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
   </body>
 
 </html>

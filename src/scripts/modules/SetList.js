@@ -1,17 +1,18 @@
-const firebase = require('firebase')
-
-firebase.initializeApp({
-  apiKey: "AIzaSyBqaeiNuy4zlN1fOzV7l9OuDwAzKmO24nE",
-  authDomain: "setlist-6c6fe.firebaseapp.com",
-  databaseURL: "https://setlist-6c6fe.firebaseio.com",
-  storageBucket: "",
-  messagingSenderId: "1082659044728"
-})
+// const firebase = require('firebase')
+//
+// firebase.initializeApp({
+//   apiKey: "AIzaSyBqaeiNuy4zlN1fOzV7l9OuDwAzKmO24nE",
+//   authDomain: "setlist-6c6fe.firebaseapp.com",
+//   databaseURL: "https://setlist-6c6fe.firebaseio.com",
+//   storageBucket: "",
+//   messagingSenderId: "1082659044728"
+// })
 
 const Base = require('./Base')
 const Room = require('./Room')
+const Queue = require('./Queue')
 
-const $setlist = document.getElementById('setlist')
+const $setlist = document.getElementById('set-list')
 
 class SetList extends Base {
   constructor() {
@@ -20,12 +21,16 @@ class SetList extends Base {
     // set up the state object
     this.state = {
       rooms: {},
+      roomView: 'queue',
       activeRoom: null
     }
 
+    // set up child modules
+    this._rooms = {}
+    this.queue = new Queue()
+
     // watch room data
     this.watchRoomsData()
-    this._rooms = {}
 
     // ... and voila!
     this.render()
@@ -34,18 +39,21 @@ class SetList extends Base {
   watchRoomsData() {
     // Instantiate a watcher that will update this.rooms in realtime.
     // Easy peasy. Thanks, Firebase!
-    firebase.database().ref('rooms/').on('value', (snapshot) => {
-      const rooms = snapshot.val()
+    // firebase.database().ref('rooms/').on('value', (snapshot) => {
+      // const rooms = snapshot.val()
+      const rooms = {
+        'test': { name: 'Recures Center' }
+      }
 
       for (let i in rooms) {
         this.state.rooms[i] = {
           name: rooms[i].name,
           handleClick: () => this.enterRoom(i)
         }
-
-        this.render()
       }
-    })
+
+      this.render()
+    // })
   }
 
   enterRoom(key) {
@@ -54,15 +62,16 @@ class SetList extends Base {
   }
 
   render() {
-    const { rooms } = this.state
+    const { activeRoom, roomView, rooms } = this.state
 
+    // Update the room modules from this.state
     for (let i in rooms) {
       const roomRef = this._rooms[i]
       if (roomRef) roomRef.update(rooms[i])
       else this._rooms[i] = new Room(rooms[i])
     }
 
-    console.log(this.state.activeRoom)
+    this.queue.update({ roomKey: activeRoom })
   }
 }
 

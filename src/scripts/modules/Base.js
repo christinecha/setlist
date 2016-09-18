@@ -25,8 +25,10 @@ class Base {
   }
 
   update(props) {
-    this.props = props
+    this.props = Object.assign(this.props, props)
     this.render()
+
+    if (this.didUpdate) this.didUpdate(props)
   }
 
   render() {

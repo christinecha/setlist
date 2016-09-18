@@ -1,6 +1,6 @@
 const Base = require('./Base')
 
-const $setlist = document.getElementById('setlist')
+const $setlist = document.getElementById('set-list')
 const $roomSelector = document.getElementById('room-selector')
 const $prototypes = document.getElementById('prototypes')
 const $roomPrototype = $prototypes.querySelector('.room')
