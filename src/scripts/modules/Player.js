@@ -16,7 +16,6 @@ class Player extends Base {
   }
 
   addEventListeners() {
-    console.log(this.props.handleClosePlayer)
     this.$closePlayer.addEventListener('click', this.props.handleClosePlayer)
     // this.node.addEventListener('click', this.props.handleClick)
   }

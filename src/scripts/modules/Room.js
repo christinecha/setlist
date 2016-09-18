@@ -7,7 +7,7 @@ const $roomPrototype = $prototypes.querySelector('.room')
 
 class Room extends Base {
   constructor(props = {}) {
-    super(props, $roomPrototype, $roomSelector)
+    super(props, $roomPrototype, props.$roomsList)
 
     // cache the nodes you'll want access to in 'render' so it's only done once
     this.$roomName = this.node.querySelector('.room-name')

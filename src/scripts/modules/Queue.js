@@ -64,10 +64,7 @@ class Queue extends Base {
   }
 
   cleanSongs() {
-    for (let i in this._songs) {
-      this._songs[i].destroy()
-    }
-
+    for (let i in this._songs) this._songs[i].destroy()
     this._songs = {}
   }
 
@@ -77,11 +74,7 @@ class Queue extends Base {
     this.$roomName.innerText = this.props.roomKey
 
     this.cleanSongs()
-
-    for (let i in songs) {
-      const songRef = this._songs[i]
-      this._songs[i] = new Song(songs[i])
-    }
+    for (let i in songs) this._songs[i] = new Song(songs[i])
 
     this._player.update({
       isVisible: this.props.showPlayer,

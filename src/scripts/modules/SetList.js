@@ -9,7 +9,7 @@ firebase.initializeApp({
 })
 
 const Base = require('./Base')
-const Room = require('./Room')
+const Rooms = require('./Rooms')
 const Queue = require('./Queue')
 
 const $setlist = document.getElementById('set-list')
@@ -28,8 +28,8 @@ class SetList extends Base {
     }
 
     // set up child modules
-    this._rooms = {}
-    this.queue = new Queue({ handleClosePlayer: this.handleClosePlayer.bind(this) })
+    this._rooms = new Rooms({ rooms: {} })
+    this._queue = new Queue({ handleClosePlayer: this.handleClosePlayer.bind(this) })
 
     // watch room data
     this.watchRoomsData()
@@ -79,19 +79,13 @@ class SetList extends Base {
   /*****************************************/
 
   render() {
-    const { activeRoom, roomView, rooms } = this.state
+    const { activeRoom, showPlayer, rooms } = this.state
 
-    // Update the room modules from this.state
-    for (let i in rooms) {
-      const roomRef = this._rooms[i]
-      if (roomRef) roomRef.update(rooms[i])
-      else this._rooms[i] = new Room(rooms[i])
-    }
-
-    this.queue.update({
+    this._rooms.update({ rooms: rooms })
+    this._queue.update({
       roomKey: activeRoom,
-      showPlayer: this.state.showPlayer
-   })
+      showPlayer: showPlayer
+    })
   }
 }
 
