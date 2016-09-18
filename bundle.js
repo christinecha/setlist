@@ -44,64 +44,36 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(4);
+	module.exports = __webpack_require__(5);
 
 
 /***/ },
 /* 1 */,
 /* 2 */,
 /* 3 */,
-/* 4 */
+/* 4 */,
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	__webpack_require__(6);
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	__webpack_require__(5);
-
-	var firebase = __webpack_require__(9);
-
-	var Room = __webpack_require__(14);
-
-	// firebase.initializeApp({ keys })
-
-	var SetList = function () {
-	  function SetList() {
-	    _classCallCheck(this, SetList);
-
-	    this.state = {
-	      activeRoomId: 'Recurse Center'
-	    };
-
-	    this.render();
-	  }
-
-	  _createClass(SetList, [{
-	    key: 'render',
-	    value: function render() {
-	      new Room(this.state.activeRoomId);
-	    }
-	  }]);
-
-	  return SetList;
-	}();
+	var SetList = __webpack_require__(10);
 
 	new SetList();
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(6);
+	var content = __webpack_require__(7);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(8)(content, {});
+	var update = __webpack_require__(9)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -118,21 +90,21 @@
 	}
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(7)();
+	exports = module.exports = __webpack_require__(8)();
 	// imports
 
 
 	// module
-	exports.push([module.id, ".no-transitions {\n  transition: none !important;\n  -webkit-transition: none !important;\n  -moz-transition: none !important;\n}\n* {\n  font-family: 'Inconsolata', monospace;\n  margin: 0 0;\n  padding: 0 0;\n}\n.xsmall {\n  font-size: 9px;\n  text-transform: uppercase;\n}\n.clickable {\n  cursor: pointer;\n}\n.inline {\n  display: inline-block;\n}\n.hidden {\n  display: none;\n}\n", ""]);
+	exports.push([module.id, ".no-transitions {\n  transition: none !important;\n  -webkit-transition: none !important;\n  -moz-transition: none !important;\n}\n* {\n  font-family: 'Inconsolata', monospace;\n  margin: 0 0;\n  padding: 0 0;\n}\n.xsmall {\n  font-size: 11px;\n  text-transform: uppercase;\n  letter-spacing: 0.1em;\n}\n.clickable {\n  cursor: pointer;\n}\n.inline {\n  display: inline-block;\n}\n.hidden {\n  display: none;\n}\n#room-selector {\n  width: 300px;\n  height: 100%;\n}\n#room-selector .room-name {\n  text-transform: uppercase;\n  font-size: 22px;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 	/*
@@ -188,7 +160,7 @@
 
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -440,7 +412,111 @@
 
 
 /***/ },
-/* 9 */
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var firebase = __webpack_require__(11);
+
+	firebase.initializeApp({
+	  apiKey: "AIzaSyBqaeiNuy4zlN1fOzV7l9OuDwAzKmO24nE",
+	  authDomain: "setlist-6c6fe.firebaseapp.com",
+	  databaseURL: "https://setlist-6c6fe.firebaseio.com",
+	  storageBucket: "",
+	  messagingSenderId: "1082659044728"
+	});
+
+	var Base = __webpack_require__(16);
+	var Room = __webpack_require__(17);
+
+	var $setlist = document.getElementById('setlist');
+
+	var SetList = function (_Base) {
+	  _inherits(SetList, _Base);
+
+	  function SetList() {
+	    _classCallCheck(this, SetList);
+
+	    // set up the state object
+	    var _this = _possibleConstructorReturn(this, (SetList.__proto__ || Object.getPrototypeOf(SetList)).call(this));
+
+	    _this.state = {
+	      rooms: {},
+	      activeRoom: null
+	    };
+
+	    // watch room data
+	    _this.watchRoomsData();
+	    _this._rooms = {};
+
+	    // ... and voila!
+	    _this.render();
+	    return _this;
+	  }
+
+	  _createClass(SetList, [{
+	    key: "watchRoomsData",
+	    value: function watchRoomsData() {
+	      var _this2 = this;
+
+	      // Instantiate a watcher that will update this.rooms in realtime.
+	      // Easy peasy. Thanks, Firebase!
+	      firebase.database().ref('rooms/').on('value', function (snapshot) {
+	        var rooms = snapshot.val();
+
+	        var _loop = function _loop(i) {
+	          _this2.state.rooms[i] = {
+	            name: rooms[i].name,
+	            handleClick: function handleClick() {
+	              return _this2.enterRoom(i);
+	            }
+	          };
+
+	          _this2.render();
+	        };
+
+	        for (var i in rooms) {
+	          _loop(i);
+	        }
+	      });
+	    }
+	  }, {
+	    key: "enterRoom",
+	    value: function enterRoom(key) {
+	      this.state.activeRoom = key;
+	      this.render();
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      var rooms = this.state.rooms;
+
+
+	      for (var i in rooms) {
+	        var roomRef = this._rooms[i];
+	        if (roomRef) roomRef.update(rooms[i]);else this._rooms[i] = new Room(rooms[i]);
+	      }
+
+	      console.log(this.state.activeRoom);
+	    }
+	  }]);
+
+	  return SetList;
+	}(Base);
+
+	module.exports = SetList;
+
+/***/ },
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -450,15 +526,15 @@
 	 *
 	 *   firebase = require('firebase');
 	 */
-	var firebase = __webpack_require__(10);
-	__webpack_require__(11);
-	__webpack_require__(12);
+	var firebase = __webpack_require__(12);
 	__webpack_require__(13);
+	__webpack_require__(14);
+	__webpack_require__(15);
 	module.exports = firebase;
 
 
 /***/ },
-/* 10 */
+/* 12 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*! @license Firebase v3.4.0
@@ -495,10 +571,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 11 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var firebase = __webpack_require__(10);
+	var firebase = __webpack_require__(12);
 	/*! @license Firebase v3.4.0
 	    Build: 3.4.0-rc.3
 	    Terms: https://developers.google.com/terms */
@@ -720,10 +796,10 @@
 
 
 /***/ },
-/* 12 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var firebase = __webpack_require__(10);
+	var firebase = __webpack_require__(12);
 	/*! @license Firebase v3.4.0
 	    Build: 3.4.0-rc.3
 	    Terms: https://developers.google.com/terms */
@@ -971,10 +1047,10 @@
 
 
 /***/ },
-/* 13 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var firebase = __webpack_require__(10);
+	var firebase = __webpack_require__(12);
 	/*! @license Firebase v3.4.0
 	    Build: 3.4.0-rc.3
 	    Terms: https://developers.google.com/terms */
@@ -1079,18 +1155,114 @@
 
 
 /***/ },
-/* 14 */
+/* 16 */
 /***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var Room = function Room(id) {
-	  _classCallCheck(this, Room);
+	var Base = function () {
 
-	  console.log('You are in Room: ' + id);
-	};
+	  /** Instantiate your module.
+	    * @param {Object} props      | an object containing any data you'll later want to access
+	    * @param {Element} prototype | a node that you can clone - this will be your DOM reference
+	    * @param {Element} parent    | the DOM Node in which you want to append this new element
+	   **/
+	  function Base() {
+	    _classCallCheck(this, Base);
+
+	    // Using arguments instead of actual param requirements so that
+	    // the top-most module can be constructed without any of the args.
+
+	    var props = arguments[0] || {};
+	    var prototype = arguments[1] || null;
+	    var parent = arguments[2] || null;
+
+	    this.props = props;
+
+	    // store a clone of the prototype
+	    if (!prototype) return;
+	    this.node = prototype.cloneNode(true);
+
+	    // stick the node into the supplied container
+	    if (!parent) return;
+	    parent.appendChild(this.node);
+	  }
+
+	  _createClass(Base, [{
+	    key: "update",
+	    value: function update(props) {
+	      this.props = props;
+	      this.render();
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      // Do stuff to this.node
+	    }
+	  }]);
+
+	  return Base;
+	}();
+
+	module.exports = Base;
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Base = __webpack_require__(16);
+
+	var $setlist = document.getElementById('setlist');
+	var $roomSelector = document.getElementById('room-selector');
+	var $prototypes = document.getElementById('prototypes');
+	var $roomPrototype = $prototypes.querySelector('.room');
+
+	var Room = function (_Base) {
+	  _inherits(Room, _Base);
+
+	  function Room() {
+	    var props = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	    _classCallCheck(this, Room);
+
+	    // cache the nodes you'll want access to in 'render' so it's only done once
+	    var _this = _possibleConstructorReturn(this, (Room.__proto__ || Object.getPrototypeOf(Room)).call(this, props, $roomPrototype, $roomSelector));
+
+	    _this.$roomName = _this.node.querySelector('.room-name');
+
+	    _this.addEventListeners();
+	    _this.render();
+	    return _this;
+	  }
+
+	  _createClass(Room, [{
+	    key: 'addEventListeners',
+	    value: function addEventListeners() {
+	      this.node.addEventListener('click', this.props.handleClick);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      this.$roomName.innerText = this.props.name;
+	    }
+	  }]);
+
+	  return Room;
+	}(Base);
 
 	module.exports = Room;
 
